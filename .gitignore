@@ -1,0 +1,3 @@
+*.o
+ft_ssl
+compile_flags.txt
