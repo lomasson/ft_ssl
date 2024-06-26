@@ -1,7 +1,9 @@
 #ifndef FT_SSL_HPP
 # define FT_SSL_HPP
+#include <stdint.h>
 # include <stdio.h>
 # include <getopt.h>
+#include <sys/types.h>
 # include <unistd.h>
 # include <stdbool.h>
 # include <stdlib.h>

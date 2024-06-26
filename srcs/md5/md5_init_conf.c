@@ -21,28 +21,19 @@ void md5_init_conf(t_md5_args *args, t_md5_conf *conf)
     fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL, 0) | O_NONBLOCK);
 	if (read(STDIN_FILENO, &buffer, 1024) > 0)
 	{
-		printf("READ STDIN:	FUND\n");
 		conf->file_in[i] = fileno(tmpfile());
 		write(conf->file_in[i], buffer, strlen(buffer));
 		lseek(conf->file_in[i++], 0, SEEK_SET);
 	}
-	else
-		printf("READ STDIN:	NOT_FUND\n");
 	if (args->str_in)
 	{
-		printf("READ STR:	FUND\n");
 		conf->file_in[i] = fileno(tmpfile());
 		write(conf->file_in[i], args->str_in, strlen(args->str_in));
 		lseek(conf->file_in[i++], 0, SEEK_SET);
 	}
-	else
-		printf("READ STR:	NOT_FUND\n");
-	if (!args->file_in[y])
-		printf("READ FILE:	NOT_FUND\n");
 	while (args->file_in[y] && y < MAX_INPUT_FILE)
 	{
 		// printf("READ FILE:	%s\n", args->file_in[y]);
-		printf("READ FILE:	FUND\n");
 		conf->file_in[i] = open(args->file_in[y], O_RDONLY);
 		i++;
 		y++;

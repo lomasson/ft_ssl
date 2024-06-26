@@ -1,76 +1,121 @@
 #include "md5.h"
-// #include <cstdio>
-// #include <cstdio>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-// Parse the fd and build a chainned list of Message (=512 bit)
-static void	read_input(int fd, t_md5 *md5)
+// MD5 Algorithm
+static void md5_hash(t_Message *word, t_buffers *vars)
 {
-	t_M			buffer;
-	u_int64_t	total_read = 0;
+	u_int32_t	A = vars->A;
+	u_int32_t	B = vars->B;
+	u_int32_t	C = vars->C;
+	u_int32_t	D = vars->D;
+	u_int32_t	F = 0x0;
+	u_int32_t	G = 0;
+	u_int32_t	Konst[64] = CONST_K;
+	u_int8_t	Shift[64] = CONST_S;
 
-	memset(&buffer, 0, MD5_BLOCK_LENGHT);
+	for(int i = 0; i < 64; i++)
+	{
+		if (i < 16)
+		{
+			F = F(B, C, D);
+			G = i;
+		}
+		else if (i < 32)
+		{
+			F = G(B, C, D);
+			G = (5 * i + 1) % 16;
+		}
+		else if (i < 48)
+		{
+			F = H(B, C, D);
+			G = (3 * i + 5) % 16;
+		}
+		else
+		{
+			F = I(B, C, D);
+			G  = (7 * i) % 16;
+		}
+		A += F + Konst[i] + ((u_int32_t *)word)[G];
+		A = ROTATE_LEFT(A, Shift[i]);
+		A += B;
+
+		u_int32_t Temp_d = D;
+		D = C;
+		C = B;
+		B = A;
+		A = Temp_d;
+	}
+	vars->A += A;
+	vars->B += B;
+	vars->C += C;
+	vars->D += D;
+}
+/* Encodes input (UINT4) into output (unsigned char). Assumes len is
+  a multiple of 4 and print him.
+ */
+static void print_hash(const t_buffers *vars){
+	u_int8_t	res[16];
+
+	for(unsigned int i = 0; i < 4; ++i){
+		res[(i * 4) + 0] = (uint8_t)(((u_int32_t *)vars)[i] & 0x000000FF);
+		res[(i * 4) + 1] = (uint8_t)((((u_int32_t *)vars)[i] & 0x0000FF00) >>  8);
+		res[(i * 4) + 2] = (uint8_t)((((u_int32_t *)vars)[i] & 0x00FF0000) >> 16);
+		res[(i * 4) + 3] = (uint8_t)((((u_int32_t *)vars)[i] & 0xFF000000) >> 24);
+	}
+	for(int i = 0; i < 16; ++i){
+		printf("%02x", res[i]);
+	}
+	printf("\n");
+}
+
+
+// Parse the fd and build a hash Message by Message (Message <= 512 bit) (Message = 16 word of 32bits)
+static void hash(const int fd, t_buffers *mdbuffer)
+{
+	t_Message			buffer;
+	uint64_t	total_read = 0;
+
 	while (42)
 	{
-		md5->next = NULL;
-		int read_buffer = read(fd, (char *)&buffer, MD5_BLOCK_LENGHT);
-		if (read_buffer == 0)
-				return ;
+		memset(&buffer, 0, MD5_BLOCK_LEN);
+		u_int64_t read_buffer = read(fd, &buffer, MD5_BLOCK_LEN);
 		total_read += (read_buffer * 8);		// Convert the numbers of octets read and add to total numbers of bits read
-		memcpy(&md5->M, &buffer, 64);
-		if (read_buffer > MD5_BLOCK_LENGHT_WIHOUT_PADDING)
+		// If buffer read is > 56oct, we can't add padding (8oct) but make new bloc message and hash him.
+		// Use result of md5_hash to init next ABCD variables
+		if (read_buffer > MD5_BLOCK_LEN_WIHOUT_PADDING)
+			md5_hash(&buffer, mdbuffer);
+		else
 		{
-			md5->next = malloc(sizeof(t_md5));
-			md5 = md5->next;
-		}
-		else if (read_buffer <= MD5_BLOCK_LENGHT_WIHOUT_PADDING)
-		{
-			((char *)(&md5->M.w0))[read_buffer] = (char)128;  // add the last 1 bit at end of buffer
-			md5->M.w14 = total_read >> MD5_WORD_LEN;
-			md5->M.w15 = total_read;
-			return;
+			buffer.w[read_buffer] = (char)128;  // add the last 1 bit at end of buffer (128 = 10000000)
+			*(uint64_t *)&(buffer.w[56]) = (uint64_t)total_read; // add padding
+			md5_hash(&buffer, mdbuffer);
+			return ;
 		}
 	}
 }
 
-static void md5_hash(t_md5 *md5, char *hash)
+static void init_mdbuffers(t_buffers *vars)
 {
-	while(md5)
-	{
-		md5 = md5->next;
-	}
-}
-
-
-static void algo(t_md5_conf *conf, int fd)
-{
-	(void)conf;
-	char			hash[MD5_HASH_LEN];
-	t_md5			*md5 = malloc(sizeof(t_md5));
-	unsigned char	buffer[MD5_BLOCK_LENGHT];
-
-	memset(buffer, 0, MD5_BLOCK_LENGHT);
-	memset(hash, 0, MD5_HASH_LEN);
-	memset(md5, 0, sizeof(t_md5));
-	read_input(fd, md5);
-	md5_hash(md5, hash);
-	printf("THE HASH: %s\n", hash);
+	vars->A = INIT_A;
+	vars->B = INIT_B;
+	vars->C = INIT_C;
+	vars->D = INIT_D;
 }
 
 void md5(t_md5_conf *conf)
 {
-	t_md5 *md5;
+	int			i = 0;
+	t_buffers	vars;
 
-	md5 = malloc(sizeof(t_md5));
-	memset(md5, 0, sizeof(t_md5));
-	printf("nb fd %d\n", *conf->file_in);
-	int i = 0;
-	while (conf->file_in[i] >= 0)
+	while (conf-> file_in[i] >= 0)
 	{
-		algo(conf, conf->file_in[i]);
-		i++;
+		init_mdbuffers(&vars);
+		hash(conf->file_in[i], &vars);
+		close(conf->file_in[i++]);
+		print_hash(&vars);
 	}
 }

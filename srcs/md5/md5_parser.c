@@ -17,33 +17,29 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 		case 'p':
 			{
 				md5_args->append = true;
-				printf("P arg\n");
 				break;
 			}
 		case 'q':
 			{
 				md5_args->quiet_mode = true;
-				printf("Q arg\n");
 				break;
 			}
 		case 'r':
 			{
 				md5_args->reverse_mode = true;
-				printf("R arg\n");
 				break;
 			}
 		case 's':
 			{
-				md5_args->str_in = arg;
-				printf("S arg: %s\n", arg);
+				md5_args->reverse_mode = true;
+				md5_args->str_in = arg; 
 				break;
 			}
 		case ARGP_KEY_ARG:
 			{
 				if (state->arg_num < MAX_INPUT_FILE)
 				{
-					md5_args->file_in[state->arg_num] = arg;
-					printf("Md5 arg %s\n", arg);
+					md5_args->file_in[state->arg_num] = arg; 
 					break;
 				}
 			}

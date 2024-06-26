@@ -1,4 +1,5 @@
 #include "../include/ft_ssl.h"
+#include "md5/md5.h"
 
 static void ssl(t_conf *conf)
 {
@@ -6,7 +7,7 @@ static void ssl(t_conf *conf)
 	{
 		case MD5:
 		{
-			md5(&conf->md5_conf);	
+			md5((t_md5_conf *)conf);	
 		}
 		case SHA256:
 		{
@@ -45,5 +46,4 @@ int main(int argc, char **argv) {
 	ssl_parser(argc, argv, &ssl_args);
 	init_ssl_conf(&ssl_conf, &ssl_args);
 	ssl(&ssl_conf);
-	printf("TOTO\n");
 }
