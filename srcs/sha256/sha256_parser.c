@@ -1,4 +1,4 @@
-#include "md5.h"
+#include "sha256.h"
 
 static struct argp_option options[] =
 {
@@ -11,34 +11,34 @@ static struct argp_option options[] =
 
 static int parse_opt(int key, char *arg, struct argp_state *state)
 {
-	t_md5_args *md5_args = state->input;
+	t_sha256_args *sha256_args = state->input;
 	switch (key)
 	{
 		case 'p':
 			{
-				md5_args->append = true;
+				sha256_args->append = true;
 				break;
 			}
 		case 'q':
 			{
-				md5_args->quiet_mode = true;
+				sha256_args->quiet_mode = true;
 				break;
-			}
+ 		}
 		case 'r':
 			{
-				md5_args->reverse_mode = true;
+				sha256_args->reverse_mode = true;
 				break;
 			}
 		case 's':
 			{
-				md5_args->str_in = arg; 
+				sha256_args->str_in = arg; 
 				break;
 			}
 		case ARGP_KEY_ARG:
 			{
 				if (state->arg_num < MAX_INPUT_FILE)
 				{
-					md5_args->file_in[state->arg_num] = arg; 
+					sha256_args->file_in[state->arg_num] = arg; 
 					break;
 				}
 			}
@@ -49,9 +49,9 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 }
 
 
-void md5_parser(struct argp_state *state)
+void sha256_parser(struct argp_state *state)
 {
-	((t_md5_args *)state->input)->cmd = MD5;
+	((t_sha256_args *)state->input)->cmd = SHA256;
 	struct argp argp = { options, parse_opt, "[files]", 0, 0, 0, 0};
 	argp_parse(&argp, --state->argc, ++state->argv, 0, 0, state->input);
 }

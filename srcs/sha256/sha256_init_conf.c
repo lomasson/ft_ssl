@@ -1,11 +1,12 @@
-#include "md5.h"
-void md5_init_conf(t_md5_args *args, t_md5_conf *conf)
+#include "sha256.h"
+
+void sha256_init_conf(t_sha256_args *args, t_sha256_conf *conf)
 {
 	memset(conf->input_fd, -1, sizeof(int) * 9);
-	conf->cmd = MD5;
-	conf->append= (t_md5_conf *)args->append;
-	conf->quiet_mode = (t_md5_conf *)args->quiet_mode;
-	conf->reverse_mode = (t_md5_conf *)args->reverse_mode;
+	conf->cmd = SHA256;
+	conf->append= (t_sha256_conf *)args->append;
+	conf->quiet_mode = (t_sha256_conf *)args->quiet_mode;
+	conf->reverse_mode = (t_sha256_conf *)args->reverse_mode;
 	int i = 0;
 	int y = 0;
 	char buffer[1024] = {0};

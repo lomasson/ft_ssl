@@ -1,4 +1,5 @@
 #include "../include/ft_ssl.h"
+#include "sha256/sha256.h"
 
 static struct argp_option main_options[] =
 	{
@@ -17,7 +18,8 @@ static int parse_command(char *arg, struct argp_state *state){
 	}
 	else if (strcmp(arg, "sha256") == 0)
 	{
-		printf("SHA256");
+		sha256_parser(state);
+		printf("SHA256\n");
 		return 0;
 	}
 	return 1;

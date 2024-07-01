@@ -1,5 +1,6 @@
 #include "../include/ft_ssl.h"
 #include "md5/md5.h"
+#include "sha256/sha256.h"
 
 static void ssl(t_conf *conf)
 {
@@ -8,10 +9,12 @@ static void ssl(t_conf *conf)
 		case MD5:
 		{
 			md5((t_md5_conf *)conf);	
+			break ;
 		}
 		case SHA256:
 		{
-
+			hash_sha256((t_sha256_conf *)conf);
+			break ;
 		}
 		default:
 		{
@@ -26,10 +29,12 @@ static void init_ssl_conf(t_conf *conf, t_args *args)
 		case MD5:
 		{
 			md5_init_conf((t_md5_args *)args, (t_md5_conf *)conf);	
+			break ;
 		}
 		case SHA256:
 		{
-
+			sha256_init_conf((t_sha256_args *)args, (t_sha256_conf *)conf);
+			break ;
 		}
 		default:
 		{
@@ -37,7 +42,6 @@ static void init_ssl_conf(t_conf *conf, t_args *args)
 	}
 
 }
-
 
 int main(int argc, char **argv) {
 	t_args ssl_args;

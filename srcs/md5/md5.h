@@ -5,12 +5,21 @@
 # include <stdbool.h>
 # include <stdint.h>
 # include <sys/types.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include "../../include/commands.h"
+
 
 // For all explain of define https://www.ietf.org/rfc/rfc1321.txt
 # define MAX_INPUT_FILE 8
 # define MD5_DIGEST_LEN 32
 # define MD5_BLOCK_LEN 64 // 64 byte = 512 bit
-# define MD5_BLOCK_LEN_WIHOUT_PADDING 56 // 56 byte = 418 bi
+# define MD5_BLOCK_LEN_WIHOUT_PADDING 55
 # define MD5_WORD_LEN 32
 # define MD5_HASH_LEN 32
 # define MOD 4294967296 // == 2^32
@@ -51,12 +60,6 @@
 	4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23, \
 	6,10,15,21,6,10,15,21,6,10,15,21,6,10,15,21}
 
-
-enum COMMAND {
-	MD5,
-	SHA256
-};
-
 typedef struct s_buffers {
 	u_int32_t A;
 	u_int32_t B;
@@ -83,12 +86,14 @@ typedef struct s_md5_conf {
 	bool			quiet_mode;
 	bool			reverse_mode;
 	bool			append;
-	int				file_in[MAX_INPUT_FILE + 1];
+	char			*file_in[MAX_INPUT_FILE];
+	int				input_fd[MAX_INPUT_FILE + 1];
 } t_md5_conf;
 
 
 void md5_parser(struct argp_state *state);
 void md5_init_conf(t_md5_args *args, t_md5_conf *conf);
 void md5(t_md5_conf *conf);
+void finalize(const t_md5_conf *args, u_int8_t *res, int index);
 
 #endif

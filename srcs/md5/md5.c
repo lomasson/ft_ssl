@@ -1,4 +1,5 @@
 #include "md5.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -54,11 +55,11 @@ static void md5_hash(t_Message *word, t_buffers *vars)
 	vars->C += C;
 	vars->D += D;
 }
+
 /* Encodes input (UINT4) into output (unsigned char). Assumes len is
-  a multiple of 4 and print him.
- */
-static void print_hash(const t_buffers *vars){
-	u_int8_t	res[16];
+   a multiple of 4 and print him.
+   */
+static void convert_big_endian(const t_buffers *vars, u_int8_t *res){
 
 	for(unsigned int i = 0; i < 4; ++i){
 		res[(i * 4) + 0] = (uint8_t)(((u_int32_t *)vars)[i] & 0x000000FF);
@@ -66,31 +67,37 @@ static void print_hash(const t_buffers *vars){
 		res[(i * 4) + 2] = (uint8_t)((((u_int32_t *)vars)[i] & 0x00FF0000) >> 16);
 		res[(i * 4) + 3] = (uint8_t)((((u_int32_t *)vars)[i] & 0xFF000000) >> 24);
 	}
-	for(int i = 0; i < 16; ++i){
-		printf("%02x", res[i]);
-	}
-	printf("\n");
 }
 
 
 // Parse the fd and build a hash Message by Message (Message <= 512 bit) (Message = 16 word of 32bits)
 static void hash(const int fd, t_buffers *mdbuffer)
 {
-	t_Message			buffer;
+	t_Message	buffer;
 	uint64_t	total_read = 0;
+	bool		bit_padding_ok = false;
 
 	while (42)
 	{
 		memset(&buffer, 0, MD5_BLOCK_LEN);
 		u_int64_t read_buffer = read(fd, &buffer, MD5_BLOCK_LEN);
 		total_read += (read_buffer * 8);		// Convert the numbers of octets read and add to total numbers of bits read
-		// If buffer read is > 56oct, we can't add padding (8oct) but make new bloc message and hash him.
-		// Use result of md5_hash to init next ABCD variables
-		if (read_buffer > MD5_BLOCK_LEN_WIHOUT_PADDING)
+												// If buffer read is > 56oct, we can't add padding (8oct) but make new bloc message and hash him.
+												// Use result of md5_hash to init next ABCD variables
+		if (read_buffer == MD5_BLOCK_LEN)
 			md5_hash(&buffer, mdbuffer);
+		else if (read_buffer > MD5_BLOCK_LEN_WIHOUT_PADDING)
+		{
+			if (!bit_padding_ok)
+				buffer.w[read_buffer] = (char)128;  // add the last 1 bit at end of buffer (128 = 10000000)
+			bit_padding_ok = true;
+			md5_hash(&buffer, mdbuffer);
+		}
 		else
 		{
-			buffer.w[read_buffer] = (char)128;  // add the last 1 bit at end of buffer (128 = 10000000)
+			if (!bit_padding_ok)
+				buffer.w[read_buffer] = (char)128;  // add the last 1 bit at end of buffer (128 = 10000000)
+			bit_padding_ok = true;
 			*(uint64_t *)&(buffer.w[56]) = (uint64_t)total_read; // add padding
 			md5_hash(&buffer, mdbuffer);
 			return ;
@@ -110,12 +117,16 @@ void md5(t_md5_conf *conf)
 {
 	int			i = 0;
 	t_buffers	vars;
+	u_int8_t	res[16];
 
-	while (conf-> file_in[i] >= 0)
+	while (conf-> input_fd[i] >= 0)
 	{
+		memset(res, 0, 16);
 		init_mdbuffers(&vars);
-		hash(conf->file_in[i], &vars);
-		close(conf->file_in[i++]);
-		print_hash(&vars);
+		hash(conf->input_fd[i], &vars);
+		close(conf->input_fd[i]);
+		convert_big_endian(&vars, res);
+		finalize(conf, res, i);
+		i++;
 	}
 }

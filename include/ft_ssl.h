@@ -1,6 +1,7 @@
 #ifndef FT_SSL_HPP
 # define FT_SSL_HPP
 #include <stdint.h>
+#include "../include/commands.h"
 # include <stdio.h>
 # include <getopt.h>
 #include <sys/types.h>
@@ -10,6 +11,7 @@
 # include <string.h>
 # include <argp.h>
 # include "../srcs/md5/md5.h"
+# include "../srcs/sha256/sha256.h"
 
 typedef struct s_ssl_args {
 	enum COMMAND	cmd;
@@ -18,7 +20,7 @@ typedef struct s_ssl_args {
 typedef union {
 	struct	s_ssl_args		ssl_conf;
 	struct	s_md5_args		md5_args;
-	// struct	s_sha256_args	sha256_args;
+	struct	s_sha256_args	sha256_args;
 } t_args;
 
 typedef union {
