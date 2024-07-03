@@ -25,10 +25,17 @@
 # define h6 0x1f83d9ab
 # define h7 0x5be0cd19
 
+# define ROTATE_RIGHT(x, n) (((x) >> (n)) | ((x) << (32-(n))))
+
 # define CH(x, y, z) (x & y) ^ (~x & z)
 # define MAJ(x, y, z) (x & y) ^ (x & z) ^ (y & z)
-# define SIG1(x) (x >> 6) ^ (x >> 11) ^ (x >> 25)
-# define SIG0(x) (x >> 2) ^ (x >> 13) ^ (x >> 22)
+
+
+# define SIG0(x) (ROTATE_RIGHT(x, 7) ^ ROTATE_RIGHT(x, 18) ^ (x >> 3))
+# define SIG1(x) (ROTATE_RIGHT(x, 17) ^ ROTATE_RIGHT(x, 19) ^ (x >> 10))
+
+# define EP0(x) ROTATE_RIGHT(x, 6) ^ ROTATE_RIGHT(x, 11) ^ ROTATE_RIGHT(x, 25)
+# define EP1(x) ROTATE_RIGHT(x, 2) ^ ROTATE_RIGHT(x, 13) ^ ROTATE_RIGHT(x, 22)
 
 # define SHA_CONST_K { \
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, \
@@ -45,9 +52,8 @@ typedef struct s_sha_buff {
 	u_int32_t h[8];
 } t_sha_buf;
 
-
 typedef struct s_sha_msg {
-	uint8_t w[64];
+	uint32_t w[64];
 } t_sha_msg;
 
 typedef struct s_sha256_args {
