@@ -56,7 +56,6 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 void md5_parser(struct argp_state *state)
 {
 	((t_md5_args *)state->input)->cmd = MD5;
-	// memset(((t_md5_args *)state->input)->file_in, 0 , sizeof(char *) * MAX_INPUT_FILE);
 	struct argp argp = { options, parse_opt, "[files]", 0, 0, 0, 0};
 	argp_parse(&argp, --state->argc, ++state->argv, 0, 0, state->input);
 }

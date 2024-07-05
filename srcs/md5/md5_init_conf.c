@@ -21,13 +21,17 @@ void md5_init_conf(t_md5_args *args, t_md5_conf *conf)
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	if (read(STDIN_FILENO, save_buffer, 50) <= 0 && !*args->file_in)
 		fcntl(STDIN_FILENO, F_SETFL, flags );
-	if (strlen(save_buffer))
+	if (strlen(save_buffer) || !*args->file_in)
 	{
 			// conf->file_in[i] = buffer;
 		conf->input_fd[i] = fileno(tmpfile());
 		write(conf->input_fd[i], save_buffer , strlen(save_buffer));
 		while (read(STDIN_FILENO, tmp_buffer, 1024) > 0)
+		{
+			if (!*save_buffer)
+				strncpy(save_buffer, tmp_buffer, 50);
 			write(conf->input_fd[i], tmp_buffer, strlen(tmp_buffer));
+		}
 		lseek(conf->input_fd[i], 0, SEEK_SET);
 		conf->input_fd[i] = STDIN_FILENO;
 		conf->file_in[i] = save_buffer;

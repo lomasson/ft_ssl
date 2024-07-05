@@ -23,7 +23,6 @@ SRCS = srcs/md5/md5_parser.c \
 	srcs/md5/md5_print.c \
 	srcs/main.c \
 	srcs/parser.c \
-	srcs/init_conf.c \
 	srcs/sha256/sha256.c \
 	srcs/sha256/sha256_init_conf.c \
 	srcs/sha256/sha256_parser.c \
