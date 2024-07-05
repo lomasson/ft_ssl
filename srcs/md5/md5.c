@@ -119,14 +119,14 @@ void md5(t_md5_conf *conf)
 	t_buffers	vars;
 	u_int8_t	res[16];
 
-	while (conf-> input_fd[i] >= 0)
+	while (conf->input_fd[i] >= 0)
 	{
 		memset(res, 0, 16);
 		init_mdbuffers(&vars);
 		hash(conf->input_fd[i], &vars);
 		close(conf->input_fd[i]);
 		convert_big_endian(&vars, res);
-		finalize(conf, res, i);
+		finalize_md5(conf, res, i);
 		i++;
 	}
 }

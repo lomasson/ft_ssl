@@ -1,4 +1,5 @@
 #include "md5.h"
+#include <string.h>
 
 static struct argp_option options[] =
 {
@@ -36,14 +37,17 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 			}
 		case ARGP_KEY_ARG:
 			{
-				if (state->arg_num < MAX_INPUT_FILE)
+				if(state->arg_num < MAX_INPUT_FILE)
 				{
 					md5_args->file_in[state->arg_num] = arg; 
 					break;
 				}
+				return ARGP_ERR_UNKNOWN;
 			}
 		default:
-			return ARGP_ERR_UNKNOWN;
+			{
+				return ARGP_ERR_UNKNOWN;
+			}
 	}
 	return 0;
 }
@@ -52,6 +56,7 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 void md5_parser(struct argp_state *state)
 {
 	((t_md5_args *)state->input)->cmd = MD5;
+	// memset(((t_md5_args *)state->input)->file_in, 0 , sizeof(char *) * MAX_INPUT_FILE);
 	struct argp argp = { options, parse_opt, "[files]", 0, 0, 0, 0};
 	argp_parse(&argp, --state->argc, ++state->argv, 0, 0, state->input);
 }

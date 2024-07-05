@@ -78,6 +78,6 @@ typedef struct s_sha256_conf {
 void sha256_parser(struct argp_state *state);
 void sha256_init_conf(t_sha256_args *args, t_sha256_conf *conf);
 void hash_sha256(t_sha256_conf *conf);
-// void finalize(const t_sha256_conf *args, u_int8_t *res, int index);
+void finalize_sha256(const t_sha256_conf *args, const u_int32_t *res, const int index);
 
 #endif

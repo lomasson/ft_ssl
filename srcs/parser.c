@@ -12,14 +12,12 @@ static struct argp_option main_options[] =
 static int parse_command(char *arg, struct argp_state *state){
 	if (strcmp(arg, "md5") == 0)
 	{
-		printf("MD5\n");
 		md5_parser(state);
 		return 0;
 	}
 	else if (strcmp(arg, "sha256") == 0)
 	{
 		sha256_parser(state);
-		printf("SHA256\n");
 		return 0;
 	}
 	return 1;

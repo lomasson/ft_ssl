@@ -41,6 +41,7 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 					sha256_args->file_in[state->arg_num] = arg; 
 					break;
 				}
+			return ARGP_ERR_UNKNOWN;
 			}
 		default:
 			return ARGP_ERR_UNKNOWN;

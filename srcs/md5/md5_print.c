@@ -1,5 +1,6 @@
 #include "md5.h"
 #include <stdio.h>
+#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -10,18 +11,34 @@ static void print_hash(u_int8_t *res)
 	}
 }
 
-void finalize(const t_md5_conf *args, u_int8_t *res, int index)
+void finalize_md5(t_md5_conf *args, u_int8_t *res, int index)
 {
-	if (args->reverse_mode && args->input_fd[index] != 3)
+	// printf("fd: %s\n", args->file_in[index]);
+	if (args->input_fd[index] == STDIN_FILENO)
 	{
-		print_hash(res);
-		printf(" %s\n", args->file_in[index]);
-		return ;
+		if (args->append)
+		{
+			if (strlen(args->file_in[index]) >= 50)
+				printf("MD5(%s...)= ", args->file_in[index]);
+			else
+				printf("MD5(%s)= ", args->file_in[index]);
+		}
+		else
+			printf("MD5(stdin)= ");
+		free(args->file_in[index]);
 	}
-	printf("MD5(%s)= ", args->file_in[index]);
+	else
+	{
+		if (!args->quiet_mode && !args->reverse_mode)
+			printf("MD5(%s)= ", args->file_in[index]);
+		else if (!args->quiet_mode && args->reverse_mode)
+		{
+			print_hash(res);
+			printf(" %s\n", args->file_in[index]);
+			return ;
+		}
+	}
 	print_hash(res);
 	printf("\n");
-
+	close(args->input_fd[index]);
 }
-
-

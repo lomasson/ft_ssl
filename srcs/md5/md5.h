@@ -94,6 +94,6 @@ typedef struct s_md5_conf {
 void md5_parser(struct argp_state *state);
 void md5_init_conf(t_md5_args *args, t_md5_conf *conf);
 void md5(t_md5_conf *conf);
-void finalize(const t_md5_conf *args, u_int8_t *res, int index);
+void finalize_md5(t_md5_conf *args, u_int8_t *res, int index);
 
 #endif

@@ -11,9 +11,9 @@
 # **************************************************************************** #
 
 RM					= rm -rf
-CC					= clang
+CC					= gcc
 
-CFLAGS				= -Wall -Wextra -Werror -g3# -fsanitize=address 
+CFLAGS				= -Wall -Wextra -Werror -g3 -fsanitize=address 
 
 NAME				= ft_ssl
 

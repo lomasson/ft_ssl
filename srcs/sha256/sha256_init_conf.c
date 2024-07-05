@@ -1,4 +1,6 @@
 #include "sha256.h"
+#include <stdio.h>
+#include <string.h>
 
 void sha256_init_conf(t_sha256_args *args, t_sha256_conf *conf)
 {
@@ -17,7 +19,6 @@ void sha256_init_conf(t_sha256_args *args, t_sha256_conf *conf)
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	if (read(STDIN_FILENO, &check_stdin, 1) > 0 && conf->input_fd[0] < 0)
 		fcntl(STDIN_FILENO, F_SETFL, flags );
-
 	if (read(STDIN_FILENO, &buffer, 1024) > 0)
 	{
 		conf->input_fd[i] = fileno(tmpfile());
@@ -38,6 +39,12 @@ void sha256_init_conf(t_sha256_args *args, t_sha256_conf *conf)
 	{
 		// printf("READ FILE:	%s\n", args->input_fd[y]);
 		conf->input_fd[i] = open(args->file_in[y], O_RDONLY);
+		if (conf->input_fd[i] < 0)
+		{
+			printf("%s: %s\n",args->file_in[y] ,strerror(errno));
+			y++;
+			continue ;
+		}
 		conf->file_in[i] = args->file_in[y];
 		i++;
 		y++;
