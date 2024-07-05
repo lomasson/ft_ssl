@@ -48,7 +48,6 @@ void md5_init_conf(t_md5_args *args, t_md5_conf *conf)
 	}
 	while (args->file_in[y] && y < MAX_INPUT_FILE)
 	{
-		// printf("READ FILE:	%s\n", args->input_fd[y]);
 		conf->input_fd[i] = open(args->file_in[y], O_RDONLY);
 		if (conf->input_fd[i] < 0)
 		{
