@@ -1,10 +1,5 @@
 #include "md5.h"
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include "../digest.h"
 
 // MD5 Algorithm
 static void md5_hash(t_Message *word, t_buffers *vars)
@@ -80,7 +75,7 @@ static void hash(const int fd, t_buffers *mdbuffer)
 	while (42)
 	{
 		memset(&buffer, 0, MD5_BLOCK_LEN);
-		u_int64_t read_buffer = read(fd, &buffer, MD5_BLOCK_LEN);
+		int64_t read_buffer = read(fd, &buffer, MD5_BLOCK_LEN);
 		total_read += (read_buffer * 8);		// Convert the numbers of octets read and add to total numbers of bits read
 												// If buffer read is > 56oct, we can't add padding (8oct) but make new bloc message and hash him.
 												// Use result of md5_hash to init next ABCD variables
@@ -113,7 +108,7 @@ static void init_mdbuffers(t_buffers *vars)
 	vars->D = INIT_D;
 }
 
-void md5(t_md5_conf *conf)
+void md5(t_digest_conf *conf)
 {
 	int			i = 0;
 	t_buffers	vars;
@@ -126,7 +121,7 @@ void md5(t_md5_conf *conf)
 		hash(conf->input_fd[i], &vars);
 		close(conf->input_fd[i]);
 		convert_big_endian(&vars, res);
-		finalize_md5(conf, res, i);
+		digest_print(conf, res, i);
 		i++;
 	}
 }

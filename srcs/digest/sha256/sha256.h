@@ -1,17 +1,6 @@
 #ifndef SHA256_H
 # define SHA256_H
-#include "../../include/commands.h"
-# include <argp.h>
-# include <stdbool.h>
-# include <stdint.h>
 # include <sys/types.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <unistd.h>
 
 # define MAX_INPUT_FILE 8
 # define SHA256_BLOCK_LEN 64
@@ -53,31 +42,8 @@ typedef struct s_sha_buff {
 } t_sha_buf;
 
 typedef struct s_sha_msg {
-	uint32_t w[64];
+	u_int32_t w[64];
 } t_sha_msg;
 
-typedef struct s_sha256_args {
-	enum COMMAND	cmd;
-	bool			quiet_mode;
-	bool			reverse_mode;
-	bool			append;
-	char			*file_in[MAX_INPUT_FILE];
-	char			*str_in;
-} t_sha256_args;
-
-typedef struct s_sha256_conf {
-	enum COMMAND	cmd;
-	bool			quiet_mode;
-	bool			reverse_mode;
-	bool			append;
-	char			*file_in[MAX_INPUT_FILE];
-	int				input_fd[MAX_INPUT_FILE + 1];
-} t_sha256_conf;
-
-
-void sha256_parser(struct argp_state *state);
-void sha256_init_conf(t_sha256_args *args, t_sha256_conf *conf);
-void hash_sha256(t_sha256_conf *conf);
-void finalize_sha256(const t_sha256_conf *args, const u_int32_t *res, const int index);
 
 #endif

@@ -1,5 +1,5 @@
 #include "sha256.h"
-#include <stdio.h>
+#include "../digest.h"
 #include <sys/types.h>
 
 // sha256 Algorithm
@@ -33,7 +33,6 @@ static void sha256_hash(t_sha_msg *word, t_sha_buf *vars)
 		c = b;
 		b = a;
 		a = temp1 + temp2;
-
 	}
 	vars->h[0] += a;
 	vars->h[1] += b;
@@ -99,7 +98,7 @@ static void init_mdbuffers(t_sha_buf *vars)
 	};
 }
 
-void hash_sha256(t_sha256_conf *conf)
+void hash_sha256(t_digest_conf *conf)
 {
 	int			i = 0;
 	t_sha_buf	vars;
@@ -108,7 +107,7 @@ void hash_sha256(t_sha256_conf *conf)
 	{
 		init_mdbuffers(&vars);
 		hash(conf->input_fd[i], &vars);
-		finalize_sha256(conf, vars.h, i);
+		digest_print(conf, (u_int8_t *)&vars.h, i);
 		i++;
 	}
 }

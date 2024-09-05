@@ -1,5 +1,4 @@
-#include "md5.h"
-#include <string.h>
+#include "digest.h"
 
 static struct argp_option options[] =
 {
@@ -12,34 +11,34 @@ static struct argp_option options[] =
 
 static int parse_opt(int key, char *arg, struct argp_state *state)
 {
-	t_md5_args *md5_args = state->input;
+	t_digest_args *digest_args = state->input;
 	switch (key)
 	{
 		case 'p':
 			{
-				md5_args->append = true;
+				digest_args->append = true;
 				break;
 			}
 		case 'q':
 			{
-				md5_args->quiet_mode = true;
+				digest_args->quiet_mode = true;
 				break;
 			}
 		case 'r':
 			{
-				md5_args->reverse_mode = true;
+				digest_args->reverse_mode = true;
 				break;
 			}
 		case 's':
 			{
-				md5_args->str_in = arg; 
+				digest_args->str_in = arg; 
 				break;
 			}
 		case ARGP_KEY_ARG:
 			{
 				if(state->arg_num < MAX_INPUT_FILE)
 				{
-					md5_args->file_in[state->arg_num] = arg; 
+					digest_args->file_in[state->arg_num] = arg; 
 					break;
 				}
 				return ARGP_ERR_UNKNOWN;
@@ -53,9 +52,9 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 }
 
 
-void md5_parser(struct argp_state *state)
+void digest_parser(struct argp_state *state, enum COMMAND cmd)
 {
-	((t_md5_args *)state->input)->cmd = MD5;
+	((t_digest_args *)state->input)->cmd = cmd;
 	struct argp argp = { options, parse_opt, "[files]", 0, 0, 0, 0};
 	argp_parse(&argp, --state->argc, ++state->argv, 0, 0, state->input);
 }

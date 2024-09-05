@@ -1,18 +1,7 @@
-
 #ifndef MD5_H
 #define MD5_H
-# include <argp.h>
-# include <stdbool.h>
-# include <stdint.h>
+
 # include <sys/types.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <unistd.h>
-# include "../../include/commands.h"
 
 
 // For all explain of define https://www.ietf.org/rfc/rfc1321.txt
@@ -69,31 +58,9 @@ typedef struct s_buffers {
 
 
 typedef struct s_Message {
-	uint8_t w[64];
+	u_int8_t w[64];
 } t_Message;
 
-typedef struct s_md5_args {
-	enum COMMAND	cmd;
-	bool			quiet_mode;
-	bool			reverse_mode;
-	bool			append;
-	char			*file_in[MAX_INPUT_FILE];
-	char			*str_in;
-} t_md5_args;
 
-typedef struct s_md5_conf {
-	enum COMMAND	cmd;
-	bool			quiet_mode;
-	bool			reverse_mode;
-	bool			append;
-	char			*file_in[MAX_INPUT_FILE];
-	int				input_fd[MAX_INPUT_FILE + 1];
-} t_md5_conf;
-
-
-void md5_parser(struct argp_state *state);
-void md5_init_conf(t_md5_args *args, t_md5_conf *conf);
-void md5(t_md5_conf *conf);
-void finalize_md5(t_md5_conf *args, u_int8_t *res, int index);
 
 #endif
