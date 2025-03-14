@@ -1,8 +1,7 @@
 #ifndef MD5_H
 #define MD5_H
 
-# include <sys/types.h>
-
+#include "../digest.h"
 
 // For all explain of define https://www.ietf.org/rfc/rfc1321.txt
 # define MAX_INPUT_FILE 8
@@ -62,5 +61,7 @@ typedef struct s_Message {
 } t_Message;
 
 
+
+void md5(void *v_conf);
 
 #endif

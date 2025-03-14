@@ -23,12 +23,10 @@ typedef struct s_digest_conf {
 	int				std_in_fd;
 } t_digest_conf;
 
-void digest_init_conf(t_digest_args *args, t_digest_conf *conf);
-void digest_parser(struct argp_state *state, enum COMMAND cmd);
+void digest_init_conf(void *v_args, void *v_conf);
+void digest_parser(int argc, char **argv, void *v_digest_args);
 void digest_print(t_digest_conf *args, u_int8_t *res, int index);
 
-void hash_sha256(t_digest_conf *conf);
 
-void md5(t_digest_conf *conf);
 
 #endif

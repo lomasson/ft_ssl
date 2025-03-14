@@ -1,14 +1,5 @@
 #include "digest.h"
 
-static struct argp_option options[] =
-{
-	{ 0, 'p', 0, 0, "Echo STDIN to STDOUT and append the checksum to STDOUT", 0},
-	{ 0, 'q', 0, 0, "Quiet mode", 0},
-	{ 0, 'r', 0, 0, "Reverse the format of the output", 0},
-	{ 0, 's', "String", 0, "Print the sum of the given string", 0},
-	{ 0 }
-};
-
 static int parse_opt(int key, char *arg, struct argp_state *state)
 {
 	t_digest_args *digest_args = state->input;
@@ -52,9 +43,18 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 }
 
 
-void digest_parser(struct argp_state *state, enum COMMAND cmd)
+void digest_parser(int argc, char **argv, void *v_digest_args)
 {
-	((t_digest_args *)state->input)->cmd = cmd;
+	t_digest_args *digest_args = (t_digest_args *)v_digest_args;
+	static struct argp_option options[] =
+	{
+		{ 0, 'p', 0, 0, "Echo STDIN to STDOUT and append the checksum to STDOUT", 0},
+		{ 0, 'q', 0, 0, "Quiet mode", 0},
+		{ 0, 'r', 0, 0, "Reverse the format of the output", 0},
+		{ 0, 's', "String", 0, "Print the sum of the given string", 0},
+		{ 0 }
+	};
+	memset(digest_args, 0, sizeof(t_digest_args));
 	struct argp argp = { options, parse_opt, "[files]", 0, 0, 0, 0};
-	argp_parse(&argp, --state->argc, ++state->argv, 0, 0, state->input);
+	argp_parse(&argp, argc, argv, ARGP_IN_ORDER, 0, digest_args);
 }

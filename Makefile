@@ -17,7 +17,7 @@ CFLAGS				= -Wall -Wextra -Werror -g3 -fsanitize=address
 
 NAME				= ft_ssl
 
-SRCS = srcs/main.c srcs/parser.c \
+SRCS = srcs/main.c \
 	srcs/digest/digest_parser.c \
 	srcs/digest/digest_init_conf.c \
 	srcs/digest/digest_print.c \

@@ -1,6 +1,4 @@
 #include "sha256.h"
-#include "../digest.h"
-#include <sys/types.h>
 
 // sha256 Algorithm
 static void sha256_hash(t_sha_msg *word, t_sha_buf *vars)
@@ -98,11 +96,13 @@ static void init_mdbuffers(t_sha_buf *vars)
 	};
 }
 
-void hash_sha256(t_digest_conf *conf)
+void sha256(void *v_conf)
 {
+	t_digest_conf *conf = (t_digest_conf *)v_conf;
 	int			i = 0;
 	t_sha_buf	vars;
 
+	conf->cmd = SHA256;
 	while (conf-> input_fd[i] >= 0)
 	{
 		init_mdbuffers(&vars);

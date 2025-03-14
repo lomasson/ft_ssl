@@ -1,6 +1,7 @@
 #ifndef SHA256_H
 # define SHA256_H
-# include <sys/types.h>
+
+#include "../digest.h"
 
 # define MAX_INPUT_FILE 8
 # define SHA256_BLOCK_LEN 64
@@ -45,5 +46,6 @@ typedef struct s_sha_msg {
 	u_int32_t w[64];
 } t_sha_msg;
 
+void sha256(void *v_conf);
 
 #endif

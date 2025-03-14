@@ -1,5 +1,4 @@
 #include "md5.h"
-#include "../digest.h"
 
 // MD5 Algorithm
 static void md5_hash(t_Message *word, t_buffers *vars)
@@ -108,12 +107,14 @@ static void init_mdbuffers(t_buffers *vars)
 	vars->D = INIT_D;
 }
 
-void md5(t_digest_conf *conf)
+void md5(void *v_conf)
 {
+	t_digest_conf *conf = (t_digest_conf *)v_conf;
 	int			i = 0;
 	t_buffers	vars;
 	u_int8_t	res[16];
 
+	conf->cmd = MD5;
 	while (conf->input_fd[i] >= 0)
 	{
 		memset(res, 0, 16);

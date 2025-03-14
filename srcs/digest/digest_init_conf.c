@@ -13,8 +13,10 @@ static void init_struct_digest(t_digest_args *args, t_digest_conf *conf)
 	memset(conf->input_fd, -1, sizeof(int) * 9);
 }
 
-void digest_init_conf(t_digest_args *args, t_digest_conf *conf)
+void digest_init_conf(void *v_args, void *v_conf)
 {
+	t_digest_args *args = (t_digest_args *)v_args;
+	t_digest_conf *conf = (t_digest_conf *)v_conf;
 	init_struct_digest(args, conf);
 	int i = 0;
 	int y = 0;
