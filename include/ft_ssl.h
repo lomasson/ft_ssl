@@ -2,25 +2,30 @@
 # define FT_SSL_HPP
 # include "../srcs/digest/md5/md5.h"
 # include "../srcs/digest/sha256/sha256.h"
+# include "../srcs/cipher/base64/base64.h"
 
 # define ARRAY_CMD { \
-	{"sha256", digest_init_conf, digest_parser, sha256},\
-	{"md5", digest_init_conf, digest_parser, md5},\
-	{NULL, NULL, NULL, NULL}}
+	{"sha256", digest_parser, digest_init_conf, sha256, digest_helper },\
+	{"md5", digest_parser, digest_init_conf, md5, NULL},\
+	{"base64", base64_parser, base64_init_conf, base64, base64_helper},\
+	{NULL, NULL, NULL, NULL, NULL}}
 
 typedef union {
-	struct	s_digest_args		digest_args;
+	t_digest_args		digest_args;
+	t_base64_args		base64_args;
 } t_args;
 
 typedef union {
-	struct	s_digest_conf		digest_conf;
+	t_digest_conf		digest_conf;
+	t_base64_conf		base64_conf;
 } t_conf;
 
 typedef struct s_ssl {
 	char *name;
-	void (*init)(void *, void *);
 	void (*parser)(int, char **, void *);
+	void (*init)(void *, void *);
 	void (*hash)(void *);
+	void (*helper)(void);
 
 } t_ssl;
 
