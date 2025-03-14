@@ -25,7 +25,7 @@ void digest_print(t_digest_conf *args, u_int8_t *res, int index)
 			cmd = "MD5";
 			break;
 		case SHA256:
-			cmd = "SHA2-256";
+			cmd = "SHA256";
 			break;
 	}
 
@@ -56,4 +56,10 @@ void digest_print(t_digest_conf *args, u_int8_t *res, int index)
 	print_hash(res, args->cmd);
 	printf("\n");
 	close(args->input_fd[index]);
+}
+
+
+void digest_helper( void )
+{
+	printf("\nMessage Digest commands:\n\nMD5\nSHA256\n\n");
 }

@@ -13,7 +13,7 @@
 RM					= rm -rf
 CC					= gcc
 
-CFLAGS				= -Wall -Wextra -Werror -g3 -fsanitize=address 
+CFLAGS				= -Wall -Wextra -Werror -g3 #-fsanitize=address 
 
 NAME				= ft_ssl
 
@@ -23,6 +23,10 @@ SRCS = srcs/main.c \
 	srcs/digest/digest_print.c \
 	srcs/digest/md5/md5.c \
 	srcs/digest/sha256/sha256.c \
+	srcs/cipher/base64/base64_init_conf.c \
+	srcs/cipher/base64/base64_parser.c \
+	srcs/cipher/base64/base64_print.c \
+	srcs/cipher/base64/base64.c \
 
 OBJS		= $(SRCS:.c=.o)
 

@@ -26,7 +26,7 @@ typedef struct s_digest_conf {
 void digest_init_conf(void *v_args, void *v_conf);
 void digest_parser(int argc, char **argv, void *v_digest_args);
 void digest_print(t_digest_conf *args, u_int8_t *res, int index);
-
+void digest_helper( void );
 
 
 #endif
