@@ -1,6 +1,5 @@
 #include "base64.h"
 
-
 static int parse_opt(int key, char *arg, struct argp_state *state)
 {
 	t_base64_args *base64_args = state->input;
@@ -38,10 +37,8 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 	return 0;
 }
 
-
 void base64_parser(int argc, char **argv, void *v_base64_args)
 {
-	
 	t_base64_args *base64_args = (t_base64_args *)v_base64_args;
 	static struct argp_option options[] =
 	{
@@ -51,7 +48,6 @@ void base64_parser(int argc, char **argv, void *v_base64_args)
 		{ 0, 'o', 0, 0, "output file", 0},
 		{ 0 }
 	};
-
 	memset(base64_args, 0, sizeof(t_base64_args));
 	struct argp argp = { options, parse_opt, 0, 0, 0, 0, 0};
 	argp_parse(&argp, argc, argv, ARGP_IN_ORDER, 0, base64_args);
