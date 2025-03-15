@@ -18,13 +18,13 @@ void base64_init_conf(void *v_args, void *v_conf)
         conf->input = STDIN_FILENO;
     if (args->outfile)
     {
-        conf->input = open(args->outfile, O_CREAT | O_TRUNC | O_RDWR , 0);
-        if (conf->input < 0)
+        conf->fd_outfile = open(args->outfile, O_CREAT | O_TRUNC | O_RDWR , 0);
+        if (conf->fd_outfile < 0)
         {
             perror("outfile open");
             exit(1);
         }
     }
     else
-        conf->input = STDOUT_FILENO;
+        conf->fd_outfile = STDOUT_FILENO;
 }
