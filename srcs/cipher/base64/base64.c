@@ -117,4 +117,6 @@ void	base64(void *v_conf)
 	}
 	if (conf->fd_outfile != STDOUT_FILENO)
 		close(conf->fd_outfile);
+	if (conf->input != STDIN_FILENO)
+		close(conf->input);
 }
