@@ -72,6 +72,20 @@ static int bytes_decode_process( const uint8_t *encoded, uint8_t *oc)
 	return 4;
 }
 
+static int spaces_clean_up(uint8_t *origin, int nb_char)
+{
+	int spaces = 0;
+
+	for (int i = 0; i < nb_char; i++)
+	{
+		if (origin[i] == ' ' || origin[i] == '\n')
+			spaces++;
+		else if (spaces > 0)
+			origin[i - spaces] = origin[i];
+	}
+	return spaces;
+}
+
 void	base64(void *v_conf)
 {
 	int rread;
@@ -79,6 +93,7 @@ void	base64(void *v_conf)
 	uint8_t encoded[ENCODED_BUFFER_SIZE + 1];
 	t_base64_conf *conf = (t_base64_conf *)v_conf;
 	int i;
+	int spaces = 0;
 
 	if (conf->encode) //encode
 	{
@@ -102,11 +117,15 @@ void	base64(void *v_conf)
 		while (rread == ENCODED_BUFFER_SIZE)
 		{
 			i = 0;
-			rread = read(conf->input, encoded, ENCODED_BUFFER_SIZE + 1);
+			rread = read(conf->input, encoded, ENCODED_BUFFER_SIZE);
 			if (rread <= 0)
 				return ;
-			if (encoded[rread - 1] == '\n')
-				rread--;
+			spaces = spaces_clean_up(encoded, rread);
+			while (spaces > 0)
+			{
+				rread += read(conf->input, &encoded[rread - spaces], spaces) - spaces;
+				spaces = spaces_clean_up(encoded, rread);
+			}
 			encoded[rread] = '\0';
 			while ((i % 4 == 0 || i == 0) && encoded[i])
 				i += bytes_decode_process(&(encoded[i]), &decoded[i/4*3]);
