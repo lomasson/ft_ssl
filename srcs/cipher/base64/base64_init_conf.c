@@ -29,5 +29,6 @@ void base64_init_conf(void *v_args, void *v_conf)
     }
     else
         conf->fd_outfile = STDOUT_FILENO;
+    printf("encode: %d", args->encode?1:0);
     conf->encode = args->encode;
 }

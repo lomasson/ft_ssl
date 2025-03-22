@@ -49,6 +49,7 @@ void base64_parser(int argc, char **argv, void *v_base64_args)
 		{ 0 }
 	};
 	memset(base64_args, 0, sizeof(t_base64_args));
+	base64_args->encode = true;
 	struct argp argp = { options, parse_opt, 0, 0, 0, 0, 0};
 	argp_parse(&argp, argc, argv, ARGP_IN_ORDER, 0, base64_args);
 }

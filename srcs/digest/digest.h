@@ -4,6 +4,11 @@
 # include "../../include/commands.h"
 # define MAX_INPUT_FILE 8
 
+enum COMMAND {
+	MD5,
+	SHA256
+};
+
 typedef struct s_digest_args {
 	enum COMMAND	cmd;
 	bool			quiet_mode;

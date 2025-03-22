@@ -27,6 +27,10 @@ SRCS = srcs/main.c \
 	srcs/cipher/base64/base64_parser.c \
 	srcs/cipher/base64/base64_print.c \
 	srcs/cipher/base64/base64.c \
+	srcs/cipher/des/des_init_conf.c \
+	srcs/cipher/des/des_parser.c \
+	srcs/cipher/des/ecb/ecb.c \
+
 
 OBJS		= $(SRCS:.c=.o)
 

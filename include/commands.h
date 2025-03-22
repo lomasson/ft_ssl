@@ -12,11 +12,5 @@
 # include <fcntl.h>
 # include <unistd.h>
 
-// # include <getopt.h>
-
-enum COMMAND {
-	MD5,
-	SHA256
-};
 
 #endif

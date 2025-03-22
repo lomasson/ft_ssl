@@ -1,13 +1,16 @@
-#ifndef FT_SSL_HPP
-# define FT_SSL_HPP
+#ifndef FT_SSL_H
+# define FT_SSL_H
 # include "../srcs/digest/md5/md5.h"
 # include "../srcs/digest/sha256/sha256.h"
 # include "../srcs/cipher/base64/base64.h"
+# include "../srcs/cipher/des/ecb/ecb.h"
 
 # define ARRAY_CMD { \
 	{"sha256", digest_parser, digest_init_conf, sha256, digest_helper },\
 	{"md5", digest_parser, digest_init_conf, md5, NULL},\
 	{"base64", base64_parser, base64_init_conf, base64, base64_helper},\
+	{"des", des_parser, des_init_conf, ecb, NULL},\
+	{"des-ecb", des_parser, des_init_conf, ecb, NULL},\
 	{NULL, NULL, NULL, NULL, NULL}}
 
 typedef union {
@@ -30,4 +33,4 @@ typedef struct s_ssl {
 } t_ssl;
 
 
-#endif // !FT_SSL_HPP
+#endif
