@@ -7,7 +7,7 @@ void base64_init_conf(void *v_args, void *v_conf)
     
     if (args->infile)
     {
-        conf->input = open(args->infile, O_RDWR, 0);
+        conf->input = open(args->infile, O_RDONLY, 0);
         if (conf->input < 0)
         {
             perror("infile open");
@@ -18,7 +18,8 @@ void base64_init_conf(void *v_args, void *v_conf)
         conf->input = STDIN_FILENO;
     if (args->outfile)
     {
-        conf->fd_outfile = open(args->outfile, O_CREAT | O_TRUNC | O_RDWR , 0);
+        conf->fd_outfile = open(args->outfile, O_RDWR | O_CREAT | O_TRUNC , 0666);
+        printf("outfile: %s:fd:%d\n", args->outfile, conf->fd_outfile);
         if (conf->fd_outfile < 0)
         {
             perror("outfile open");
@@ -27,4 +28,5 @@ void base64_init_conf(void *v_args, void *v_conf)
     }
     else
         conf->fd_outfile = STDOUT_FILENO;
+    conf->encode = args->encode;
 }

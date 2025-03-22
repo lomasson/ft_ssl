@@ -3,8 +3,14 @@
 
 # include "../cipher.h"
 
-# define BASE64_R_SIZE 48
-# define SEND_SIZE BASE64_R_SIZE / 3 * 4
+# define DECODED_BUFFER_SIZE 48
+# define ENCODED_BUFFER_SIZE DECODED_BUFFER_SIZE / 3 * 4
+
+typedef struct uint24_t
+{
+    uint8_t a[3];
+} uint24_t;
+
 typedef struct s_base64_args {
     char *input_str;
     bool encode;
@@ -14,6 +20,7 @@ typedef struct s_base64_args {
 
 typedef struct s_base64_conf {
     int input;
+    bool encode;
     int fd_outfile;
 } t_base64_conf;
 
