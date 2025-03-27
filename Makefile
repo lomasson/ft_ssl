@@ -13,7 +13,7 @@
 RM					= rm -rf
 CC					= gcc
 
-CFLAGS				= -Wall -Wextra -Werror -g3 #-fsanitize=address 
+CFLAGS				= -Wall -Wextra -Werror -g3  -I include# -fsanitize=address
 
 NAME				= ft_ssl
 
@@ -30,6 +30,7 @@ SRCS = srcs/main.c \
 	srcs/cipher/des/des_init_conf.c \
 	srcs/cipher/des/des_parser.c \
 	srcs/cipher/des/ecb/ecb.c \
+	srcs/cipher/des/pbkdf-md5.c \
 
 
 OBJS		= $(SRCS:.c=.o)
@@ -37,11 +38,12 @@ OBJS		= $(SRCS:.c=.o)
 all: $(NAME)
 
 objs/%.o: *%.c
-	${CC} -o $@ -c $< ${CFLAGS}
+	${CC}  -o $@ -c $< ${CFLAGS}
 
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) -o $@ $(CFLAGS) -g3
+	$(CC) $(OBJS) -o $@ $(CFLAGS)
+	@echo "\033[32m\nrun command for test reel openssl: docker pull frapsoft/openssl && docker run -it frapsoft/openssl\n" 
 
 
 clean:

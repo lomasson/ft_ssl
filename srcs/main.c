@@ -1,4 +1,4 @@
-#include "../include/ft_ssl.h"
+#include "ft_ssl.h"
 
 void print_usage(t_ssl *array)
 {

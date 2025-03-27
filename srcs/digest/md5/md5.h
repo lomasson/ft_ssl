@@ -63,5 +63,8 @@ typedef struct s_Message {
 
 
 void md5(void *v_conf);
+void init_mdbuffers(t_buffers *vars);
+void hash(const int fd, t_buffers *mdbuffer);
+void convert_big_endian(const t_buffers *vars, u_int8_t *res);
 
 #endif

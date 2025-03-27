@@ -53,7 +53,7 @@ static void md5_hash(t_Message *word, t_buffers *vars)
 /* Encodes input (UINT4) into output (unsigned char). Assumes len is
    a multiple of 4 and print him.
    */
-static void convert_big_endian(const t_buffers *vars, u_int8_t *res){
+void convert_big_endian(const t_buffers *vars, u_int8_t *res){
 
 	for(unsigned int i = 0; i < 4; ++i){
 		res[(i * 4) + 0] = (uint8_t)(((u_int32_t *)vars)[i] & 0x000000FF);
@@ -65,7 +65,7 @@ static void convert_big_endian(const t_buffers *vars, u_int8_t *res){
 
 
 // Parse the fd and build a hash Message by Message (Message <= 512 bit) (Message = 16 word of 32bits)
-static void hash(const int fd, t_buffers *mdbuffer)
+void hash(const int fd, t_buffers *mdbuffer)
 {
 	t_Message	buffer;
 	uint64_t	total_read = 0;
@@ -99,7 +99,7 @@ static void hash(const int fd, t_buffers *mdbuffer)
 	}
 }
 
-static void init_mdbuffers(t_buffers *vars)
+void init_mdbuffers(t_buffers *vars)
 {
 	vars->A = INIT_A;
 	vars->B = INIT_B;

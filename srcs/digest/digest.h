@@ -1,7 +1,7 @@
 #ifndef DIGEST_H
 # define DIGEST_H
 
-# include "../../include/commands.h"
+# include "commands.h"
 # define MAX_INPUT_FILE 8
 
 enum COMMAND {
@@ -26,6 +26,7 @@ typedef struct s_digest_conf {
 	char			*file_in[MAX_INPUT_FILE];
 	int				input_fd[MAX_INPUT_FILE + 1];
 	int				std_in_fd;
+	int				output_fd;
 } t_digest_conf;
 
 void digest_init_conf(void *v_args, void *v_conf);

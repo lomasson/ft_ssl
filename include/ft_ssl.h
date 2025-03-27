@@ -16,11 +16,13 @@
 typedef union {
 	t_digest_args		digest_args;
 	t_base64_args		base64_args;
+	t_des_args			des_args;
 } t_args;
 
 typedef union {
 	t_digest_conf		digest_conf;
 	t_base64_conf		base64_conf;
+	t_des_conf			des_conf;
 } t_conf;
 
 typedef struct s_ssl {

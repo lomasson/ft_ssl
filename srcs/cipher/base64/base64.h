@@ -1,6 +1,6 @@
 #ifndef BASE64_H
 # define BASE64_H
-# include "../../../include/commands.h"
+# include "commands.h"
 
 # define DECODED_BUFFER_SIZE 48
 # define ENCODED_BUFFER_SIZE DECODED_BUFFER_SIZE / 3 * 4

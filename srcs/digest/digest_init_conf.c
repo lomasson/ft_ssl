@@ -20,26 +20,29 @@ void digest_init_conf(void *v_args, void *v_conf)
 	init_struct_digest(args, conf);
 	int i = 0;
 	int y = 0;
-		
+	int rread = 1;
 	char	*save_buffer = calloc(51, 1);
 	char	tmp_buffer[1025] = {0};
 	int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 
-
+	conf->output_fd = STDOUT_FILENO;
 	// char	check_stdin = 0;
+	rread = read(STDIN_FILENO, save_buffer, 50);
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
-	if (read(STDIN_FILENO, save_buffer, 50) <= 0 && !*args->file_in && !args->str_in)
+	if (rread <= 0 && !*args->file_in && !args->str_in)
 		fcntl(STDIN_FILENO, F_SETFL, flags );
-	if (strlen(save_buffer) || (!*args->file_in && !args->str_in))
+	if (rread|| (!*args->file_in && !args->str_in))
 	{
 		// conf->file_in[i] = buffer;
 		conf->input_fd[i] = fileno(tmpfile());
-		write(conf->input_fd[i], save_buffer , strlen(save_buffer));
-		while (read(STDIN_FILENO, tmp_buffer, 1024) > 0)
+		write(conf->input_fd[i], save_buffer , rread);
+		rread = read(STDIN_FILENO, tmp_buffer, 1024);
+		while (rread > 0)
 		{
 			if (!*save_buffer)
 				strncpy(save_buffer, tmp_buffer, 50);
-			write(conf->input_fd[i], tmp_buffer, strlen(tmp_buffer));
+			write(conf->input_fd[i], tmp_buffer, rread);
+			rread = read(STDIN_FILENO, tmp_buffer, 1024);
 		}
 		lseek(conf->input_fd[i], 0, SEEK_SET);
 		conf->std_in_fd = conf->input_fd[i];

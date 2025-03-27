@@ -1,6 +1,13 @@
 #ifndef DES_H
 # define DES_H
-# include "../../../include/commands.h"
+# include "commands.h"
+
+#define ECB_PASSWORD_LEN 512
+#define KEY_LEN 8
+# define SALT_SIZE 8
+#define PASSWORD_MESSGAE_DISPALY "enter DES-EBC encryption password: "
+#define VERIFING_PASSWORD_MESSGAE_DISPALY "Verifying - enter DES-ECB encryption password: "
+
 
 
 typedef struct s_des_args {
@@ -9,9 +16,9 @@ typedef struct s_des_args {
     bool encode_b64;
     char *infile;
     char *outfile;
-    char *key;
+    uint64_t key;
     char *password;
-    char *salt;
+    char salt[SALT_SIZE];
     char *iv;
 } t_des_args;
 
@@ -21,13 +28,12 @@ typedef struct s_des_conf {
     int fd_input;
     int fd_output;
     char *key;
-    char *password;
-    char *salt;
     char *iv;
 } t_des_conf;
 
 void des_init_conf(void *v_args, void *v_conf);
 void des_parser(int argc, char **argv, void *v_des_args);
+char *pbkdf_md5(char *password, char *salt, int dklen);
 // void des_print(t_des_conf *args, u_int8_t *res, int index);
 // void des_helper( void );
 

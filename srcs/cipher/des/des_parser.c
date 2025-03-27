@@ -27,7 +27,7 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 			}
 		case 'k':
 			{
-				des_args->key = strdup(arg);
+				strncpy((char *)&des_args->key, arg, 8);
 				break;
 			}
 		case 'o':
@@ -42,7 +42,7 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 			}
 		case 's':
 			{
-				des_args->salt = strdup(arg);
+				strcpy(des_args->salt, arg);
 				break;
 			}
 		case 'v':
@@ -65,7 +65,7 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 void des_parser(int argc, char **argv, void *v_des_args)
 {
 	t_des_args *des_args = (t_des_args *)v_des_args;
-	static struct argp_option options[] =
+	struct argp_option options[] =
 	{
 		{ 0, 'a', 0, 0, "Base64 encode/decode, depending on encryption flag", 0},
 		{ 0, 'd', 0, 0, "Decrypt", 0},
