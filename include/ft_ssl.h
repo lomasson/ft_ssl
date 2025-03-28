@@ -1,9 +1,9 @@
 #ifndef FT_SSL_H
 # define FT_SSL_H
-# include "../srcs/digest/md5/md5.h"
-# include "../srcs/digest/sha256/sha256.h"
-# include "../srcs/cipher/base64/base64.h"
-# include "../srcs/cipher/des/ecb/ecb.h"
+# include "../src/digest/md5/md5.h"
+# include "../src/digest/sha256/sha256.h"
+# include "../src/cipher/base64/base64.h"
+# include "../src/cipher/des/ecb/ecb.h"
 
 # define ARRAY_CMD { \
 	{"sha256", digest_parser, digest_init_conf, sha256, digest_helper },\

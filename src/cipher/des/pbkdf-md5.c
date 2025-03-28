@@ -3,7 +3,7 @@
 
 #define ITER_PASSWORD 1000
 
-char *pbkdf_md5(char *password, char *salt, int dklen)
+void pbkdf_md5(char *password, char *salt, int dklen)
 {
     int fd1 = fileno(tmpfile());
     t_buffers	vars;
@@ -15,7 +15,7 @@ char *pbkdf_md5(char *password, char *salt, int dklen)
 	init_mdbuffers(&vars);
 	hash(fd1, &vars);
 	convert_big_endian(&vars, res);
-    printf("\nsalt=");
+    printf("salt=");
     for(int i = 0; i < 8; ++i){
         printf("%02X", ((u_int8_t *)salt)[i]);
     }
@@ -24,5 +24,6 @@ char *pbkdf_md5(char *password, char *salt, int dklen)
         printf("%02X", ((u_int8_t *)res)[i]);
     }
     printf("\n");
-    return NULL;
+    memset(password, 0, dklen - 8);
+    strncpy(password, res, 8);
 }

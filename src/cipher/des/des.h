@@ -16,24 +16,25 @@ typedef struct s_des_args {
     bool encode_b64;
     char *infile;
     char *outfile;
-    uint64_t key;
+    uint8_t *key;
     char *password;
     char salt[SALT_SIZE];
     char *iv;
 } t_des_args;
 
 typedef struct s_des_conf {
-    bool encrypt;
-    bool encode_b64;
-    int fd_input;
-    int fd_output;
-    char *key;
-    char *iv;
+    bool    encrypt;
+    bool    encode_b64;
+    int     fd_input;
+    int     fd_output;
+    uint8_t key[KEY_LEN];
+    uint64_t key_56;
+    char    *iv;
 } t_des_conf;
 
 void des_init_conf(void *v_args, void *v_conf);
 void des_parser(int argc, char **argv, void *v_des_args);
-char *pbkdf_md5(char *password, char *salt, int dklen);
+void pbkdf_md5(char *password, char *salt, int dklen);
 // void des_print(t_des_conf *args, u_int8_t *res, int index);
 // void des_helper( void );
 

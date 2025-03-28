@@ -13,24 +13,24 @@
 RM					= rm -rf
 CC					= gcc
 
-CFLAGS				= -Wall -Wextra -Werror -g3  -I include# -fsanitize=address
+CFLAGS				= -I include #-fsanitize=address -g # -Wall -Wextra -Werror -g3  -I include -fsanitize=address
 
 NAME				= ft_ssl
 
-SRCS = srcs/main.c \
-	srcs/digest/digest_parser.c \
-	srcs/digest/digest_init_conf.c \
-	srcs/digest/digest_print.c \
-	srcs/digest/md5/md5.c \
-	srcs/digest/sha256/sha256.c \
-	srcs/cipher/base64/base64_init_conf.c \
-	srcs/cipher/base64/base64_parser.c \
-	srcs/cipher/base64/base64_print.c \
-	srcs/cipher/base64/base64.c \
-	srcs/cipher/des/des_init_conf.c \
-	srcs/cipher/des/des_parser.c \
-	srcs/cipher/des/ecb/ecb.c \
-	srcs/cipher/des/pbkdf-md5.c \
+SRCS = src/main.c \
+	src/digest/digest_parser.c \
+	src/digest/digest_init_conf.c \
+	src/digest/digest_print.c \
+	src/digest/md5/md5.c \
+	src/digest/sha256/sha256.c \
+	src/cipher/base64/base64_init_conf.c \
+	src/cipher/base64/base64_parser.c \
+	src/cipher/base64/base64_print.c \
+	src/cipher/base64/base64.c \
+	src/cipher/des/des_init_conf.c \
+	src/cipher/des/des_parser.c \
+	src/cipher/des/ecb/ecb.c \
+	src/cipher/des/pbkdf-md5.c \
 
 
 OBJS		= $(SRCS:.c=.o)
