@@ -2,11 +2,11 @@
 # define DES_H
 # include "commands.h"
 
-#define ECB_PASSWORD_LEN 512
-#define KEY_LEN 8
+# define ECB_PASSWORD_LEN 512
+# define KEY_LEN 8
 # define SALT_SIZE 8
-#define PASSWORD_MESSGAE_DISPALY "enter DES-EBC encryption password: "
-#define VERIFING_PASSWORD_MESSGAE_DISPALY "Verifying - enter DES-ECB encryption password: "
+# define PASSWORD_MESSGAE_DISPALY "enter DES-EBC encryption password: "
+# define VERIFING_PASSWORD_MESSGAE_DISPALY "Verifying - enter DES-ECB encryption password: "
 
 
 
